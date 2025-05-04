@@ -12,10 +12,10 @@ var rootCmd = &cobra.Command{
 	Long: `-- MangoStat Version 1.0 --
 Monitors VM stats like CPU and RAM`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		fmt.Println("---- STARTING SYSTEM MONITORING AT REAL TIME ----")
+		fmt.Println("---- 🔍 STARTING SYSTEM MONITORING AT REAL TIME ----")
 	},	
 	PersistentPostRun: func(cmd *cobra.Command, args []string) {
-		fmt.Println("---- REVIEW ABOVE METRICS TO ASSESS SYSTEM HEALTH ----")
+		fmt.Println("---- ✅ REVIEW ABOVE METRICS TO ASSESS SYSTEM HEALTH ----")
 	},
 }
 

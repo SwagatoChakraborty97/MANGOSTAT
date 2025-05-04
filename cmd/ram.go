@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"log"
+	"os"
 	"time"
 )
 
@@ -27,16 +29,23 @@ var ramCmd = &cobra.Command{
 		allMetrics = append(allMetrics, firstMetric)
 		allMetrics = append(allMetrics, args...)
 
+		// DEFINE TABLE FOR METRICS
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.AppendHeader(table.Row{"Metric", "Value"})
+
 		// DEFINING WHAT ACTIONS NEED TO BE MADE FOR WHICH ARGUMENT
 		// ACTIONS = {string : anonymous func} // When a string is called it triggers the anonymous func it is mapped to
 		actions := map[string]func(){
 			"total": func() {
 				currTotalRamAlloc := totalAllocatedRam()
-				fmt.Printf("Total Allocated Memory: %d bytes\n", currTotalRamAlloc)
+				t.AppendRow([]interface{}{"Total Allocated Memory", fmt.Sprintf("%d bytes", currTotalRamAlloc)})
+				// fmt.Printf("Total Allocated Memory: %d bytes\n", currTotalRamAlloc)
 			},
 			"used": func() {
 				currRamUse := ramUnderUse()
-				fmt.Printf("Memory Under Use: %.2f%%\n", currRamUse)
+				t.AppendRow([]interface{}{"Memory Under Use", fmt.Sprintf("%.2f%%", currRamUse)})
+				// fmt.Printf("Memory Under Use: %.2f%%\n", currRamUse)
 			},
 			"free": func() {
 				currFreeRam := freeRam()
@@ -148,8 +157,12 @@ var ramCmd = &cobra.Command{
 			}
 		}
 
-		fmt.Println("Time Now:", time.Now())
-
+		t.AppendRow([]interface{}{"Time Now", time.Now()})
+		
+		// fmt.Println("Time Now:", time.Now())
+		// t.AppendRow()
+		// PRINT THE TABLE
+		t.Render()
 	},
 }
 
